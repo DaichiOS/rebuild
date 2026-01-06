@@ -125,13 +125,25 @@ export default function FloatingNav() {
                     onClick={(e) => {
                       e.preventDefault();
                       setMenuOpen(false);
+
                       setTimeout(() => {
+                        const isHomePage = window.location.pathname === "/";
+
                         if (item.href === "/") {
-                          window.scrollTo({ top: 0, behavior: "smooth" });
+                          if (isHomePage) {
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                          } else {
+                            window.location.href = "/";
+                          }
                         } else if (item.href.startsWith("#")) {
-                          const element = document.querySelector(item.href);
-                          if (element) {
-                            element.scrollIntoView({ behavior: "smooth" });
+                          if (isHomePage) {
+                            const element = document.querySelector(item.href);
+                            if (element) {
+                              element.scrollIntoView({ behavior: "smooth" });
+                            }
+                          } else {
+                            // Navigate to home page with hash
+                            window.location.href = "/" + item.href;
                           }
                         } else {
                           window.location.href = item.href;
