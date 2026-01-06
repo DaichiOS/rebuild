@@ -469,3 +469,17 @@ html {
   animation: shine 1.5s ease-in-out infinite;
 }
 
+/* Page transition effect */
+@keyframes pageTransitionExpand {
+  0% {
+    clip-path: circle(0% at var(--origin-x, 50%) var(--origin-y, 50%));
+  }
+  100% {
+    clip-path: circle(150% at var(--origin-x, 50%) var(--origin-y, 50%));
+  }
+}
+
+.page-transition-overlay {
+  animation: pageTransitionExpand 600ms ease-out forwards;
+}
+
