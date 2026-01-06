@@ -66,30 +66,7 @@ export default function ApplyPage() {
 
   const totalSteps = 3;
 
-  useEffect(() => {
-    if (formComplete) {
-      // Load Calendly widget script for popup
-      const script = document.createElement("script");
-      script.src = "https://assets.calendly.com/assets/external/widget.js";
-      script.async = true;
-      document.body.appendChild(script);
-
-      // Load Calendly CSS
-      const link = document.createElement("link");
-      link.href = "https://assets.calendly.com/assets/external/widget.css";
-      link.rel = "stylesheet";
-      document.head.appendChild(link);
-
-      return () => {
-        if (document.body.contains(script)) {
-          document.body.removeChild(script);
-        }
-        if (document.head.contains(link)) {
-          document.head.removeChild(link);
-        }
-      };
-    }
-  }, [formComplete]);
+  const [calendlyLoaded, setCalendlyLoaded] = useState(false);
 
   const openCalendly = () => {
     // @ts-expect-error Calendly is loaded from external script
@@ -98,6 +75,27 @@ export default function ApplyPage() {
       window.Calendly.initPopupWidget({
         url: `https://calendly.com/eddie-rebuild/30min?hide_gdpr_banner=1&name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}`,
       });
+      return;
+    }
+
+    // Load Calendly on first click
+    if (!calendlyLoaded) {
+      const script = document.createElement("script");
+      script.src = "https://assets.calendly.com/assets/external/widget.js";
+      script.async = true;
+      script.onload = () => {
+        setCalendlyLoaded(true);
+        // @ts-expect-error Calendly is loaded from external script
+        window.Calendly.initPopupWidget({
+          url: `https://calendly.com/eddie-rebuild/30min?hide_gdpr_banner=1&name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}`,
+        });
+      };
+      document.body.appendChild(script);
+
+      const link = document.createElement("link");
+      link.href = "https://assets.calendly.com/assets/external/widget.css";
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
     }
   };
 
