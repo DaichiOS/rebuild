@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import FloatingNav from "@/components/FloatingNav";
 
 export const metadata: Metadata = {
   title: "re.build | Zero-Risk Web Development for Sydney SMBs",
@@ -20,7 +23,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <Header />
+        {children}
+        <Footer />
+        <FloatingNav />
+      </body>
     </html>
   );
 }

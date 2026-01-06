@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import ProcessFlow from "@/components/ProcessFlow";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
@@ -12,30 +11,8 @@ export default function Home() {
     <div className="min-h-screen bg-[--color-off-white]">
       {/* Hero */}
       <section className="min-h-screen flex flex-col justify-between pb-8 md:pb-12">
-        {/* Full-width logo */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="w-full px-4 md:px-8"
-        >
-          <Image
-            src="/logos/rebuild4.png"
-            alt="re.build"
-            width={2400}
-            height={400}
-            className="w-[50%] md:w-[45%] h-auto"
-            priority
-          />
-          <motion.p
-            className="body-s text-[--color-medium-gray] mt-1 px-6 md:px-12 lg:px-16"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            websites for small business
-          </motion.p>
-        </motion.div>
+        {/* Spacer for fixed header */}
+        <div className="h-16 md:h-20" />
 
         {/* Main headline - centered */}
         <div className="max-w-5xl mx-auto text-center px-6 md:px-12 lg:px-16 flex-1 flex flex-col justify-center">
@@ -83,9 +60,6 @@ export default function Home() {
             </Link>
           </motion.div>
         </div>
-
-        {/* Spacer for bottom padding */}
-        <div className="h-4 md:h-8" />
       </section>
 
       {/* Process Flow - GSAP Animated */}

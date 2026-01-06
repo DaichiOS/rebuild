@@ -234,7 +234,7 @@ export default function ProcessFlow() {
       {/* Outro CTA */}
       <div
         ref={outroRef}
-        className="py-20 md:py-32 px-6 relative overflow-hidden"
+        className="min-h-screen px-6 relative overflow-hidden flex items-center justify-center"
         style={{ backgroundColor: "#1e3a5f" }}
       >
         {/* Background gradient accent */}
