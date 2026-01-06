@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { NeonButton } from "@/components/ui/neon-button";
 
 export default function FloatingNav() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -45,22 +46,10 @@ export default function FloatingNav() {
           </Link>
 
           {/* Book a call button */}
-          <Link
-            href="/apply"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              padding: "10px 20px",
-              backgroundColor: "#131518",
-              color: "#ffffff",
-              borderRadius: "9999px",
-              textDecoration: "none",
-              fontSize: "14px",
-              fontWeight: 500,
-              whiteSpace: "nowrap",
-            }}
-          >
-            Book a call
+          <Link href="/apply" style={{ textDecoration: "none" }}>
+            <NeonButton size="sm" variant="dark">
+              Book a call
+            </NeonButton>
           </Link>
 
           {/* Hamburger menu button */}
