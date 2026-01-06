@@ -60,7 +60,7 @@ export default function ApplyPage() {
         {/* Calendly Embed */}
         <div
           className="calendly-inline-widget"
-          data-url="https://calendly.com/eddie-zeng95/30min"
+          data-url="https://calendly.com/eddie-rebuild/30min"
           style={{
             minWidth: "320px",
             height: "700px",
