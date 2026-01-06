@@ -3,14 +3,14 @@ import { cn } from '@/lib/utils'
 import { VariantProps, cva } from "class-variance-authority";
 
 const buttonVariants = cva(
-    "relative group border text-foreground mx-auto text-center rounded-full",
+    "relative group border text-foreground mx-auto text-center rounded-full cursor-pointer",
     {
         variants: {
             variant: {
                 default: "bg-blue-500/5 hover:bg-blue-500/0 border-blue-500/20",
                 solid: "bg-blue-500 hover:bg-blue-600 text-white border-transparent hover:border-foreground/50 transition-all duration-200",
                 ghost: "border-transparent bg-transparent hover:border-zinc-600 hover:bg-white/10",
-                dark: "bg-[#131518] hover:bg-[#222529] text-white border-white/10 transition-all duration-200",
+                dark: "bg-[#131518] hover:bg-[#2a2d32] text-white border-white/20 hover:border-white/40 transition-all duration-200 hover:shadow-[0_0_20px_rgba(41,141,255,0.3)]",
             },
             size: {
                 default: "px-7 py-1.5 ",
@@ -37,9 +37,9 @@ const NeonButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 ref={ref}
                 {...props}
             >
-                <span className={cn("absolute h-px opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out inset-x-0 inset-y-0 bg-gradient-to-r w-3/4 mx-auto from-transparent dark:via-blue-500 via-blue-600 to-transparent hidden", neon && "block")} />
+                <span className={cn("absolute h-px opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out inset-x-0 inset-y-0 bg-gradient-to-r w-3/4 mx-auto from-transparent via-[#298dff] to-transparent hidden", neon && "block")} />
                 {children}
-                <span className={cn("absolute group-hover:opacity-30 transition-all duration-500 ease-in-out inset-x-0 h-px -bottom-px bg-gradient-to-r w-3/4 mx-auto from-transparent dark:via-blue-500 via-blue-600 to-transparent hidden", neon && "block")} />
+                <span className={cn("absolute opacity-40 group-hover:opacity-80 transition-all duration-300 ease-in-out inset-x-0 h-px -bottom-px bg-gradient-to-r w-3/4 mx-auto from-transparent via-[#298dff] to-transparent hidden", neon && "block")} />
             </button>
         );
     }
