@@ -72,13 +72,25 @@ export default function ApplyPage() {
       const script = document.createElement("script");
       script.src = "https://assets.calendly.com/assets/external/widget.js";
       script.async = true;
+      script.onload = () => {
+        // @ts-expect-error Calendly is loaded from external script
+        if (window.Calendly) {
+          // @ts-expect-error Calendly is loaded from external script
+          window.Calendly.initInlineWidget({
+            url: `https://calendly.com/eddie-rebuild/30min?hide_gdpr_banner=1&name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}`,
+            parentElement: document.getElementById("calendly-embed"),
+          });
+        }
+      };
       document.body.appendChild(script);
 
       return () => {
-        document.body.removeChild(script);
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
       };
     }
-  }, [formComplete]);
+  }, [formComplete, formData.name, formData.email]);
 
   const updateField = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -670,8 +682,7 @@ export default function ApplyPage() {
                 transition={{ duration: 0.5, delay: 0.5 }}
               >
                 <div
-                  className="calendly-inline-widget"
-                  data-url={`https://calendly.com/eddie-rebuild/30min?hide_gdpr_banner=1&name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}`}
+                  id="calendly-embed"
                   style={{
                     minWidth: "320px",
                     height: "700px",
