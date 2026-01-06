@@ -6,6 +6,28 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { NeonButton } from "@/components/ui/neon-button";
 
+const NAV_ITEMS = [
+  { label: "Home", href: "/" },
+  { label: "How it works", href: "#how-it-works" },
+  { label: "Book a call", href: "/apply" },
+];
+
+const navigateTo = (href: string) => {
+  const isHomePage = window.location.pathname === "/";
+
+  if (href === "/") {
+    isHomePage ? window.scrollTo({ top: 0, behavior: "smooth" }) : (window.location.href = "/");
+  } else if (href.startsWith("#")) {
+    if (isHomePage) {
+      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.location.href = "/" + href;
+    }
+  } else {
+    window.location.href = href;
+  }
+};
+
 export default function FloatingNav() {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -107,11 +129,7 @@ export default function FloatingNav() {
           >
             {/* Menu links */}
             <nav style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
-              {[
-                { label: "Home", href: "/" },
-                { label: "How it works", href: "#how-it-works" },
-                { label: "Book a call", href: "/apply" },
-              ].map((item, index) => (
+              {NAV_ITEMS.map((item, index) => (
                 <motion.div
                   key={item.label}
                   initial={{ opacity: 0, y: 20 }}
@@ -123,30 +141,7 @@ export default function FloatingNav() {
                     onClick={(e) => {
                       e.preventDefault();
                       setMenuOpen(false);
-
-                      setTimeout(() => {
-                        const isHomePage = window.location.pathname === "/";
-
-                        if (item.href === "/") {
-                          if (isHomePage) {
-                            window.scrollTo({ top: 0, behavior: "smooth" });
-                          } else {
-                            window.location.href = "/";
-                          }
-                        } else if (item.href.startsWith("#")) {
-                          if (isHomePage) {
-                            const element = document.querySelector(item.href);
-                            if (element) {
-                              element.scrollIntoView({ behavior: "smooth" });
-                            }
-                          } else {
-                            // Navigate to home page with hash
-                            window.location.href = "/" + item.href;
-                          }
-                        } else {
-                          window.location.href = item.href;
-                        }
-                      }, 300);
+                      setTimeout(() => navigateTo(item.href), 300);
                     }}
                     style={{
                       fontSize: "clamp(1.75rem, 5vw, 3rem)",
