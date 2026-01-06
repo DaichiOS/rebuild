@@ -128,6 +128,16 @@ export default function ApplyPage() {
     (step === 2 && isStep2Valid) ||
     (step === 3 && isStep3Valid);
 
+  // Shared input focus/blur handlers
+  const handleInputFocus = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    e.target.style.borderColor = "#298dff";
+    e.target.style.boxShadow = "0 0 0 3px rgba(41, 141, 255, 0.1)";
+  };
+  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    e.target.style.borderColor = "#e0e2e6";
+    e.target.style.boxShadow = "none";
+  };
+
   const inputStyle: React.CSSProperties = {
     width: "100%",
     padding: "14px 16px",
@@ -156,23 +166,59 @@ export default function ApplyPage() {
     backgroundPosition: "right 16px center",
   };
 
-  const radioGroupStyle: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  };
-
-  const radioLabelStyle = (selected: boolean): React.CSSProperties => ({
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-    padding: "14px 16px",
-    border: selected ? "2px solid #298dff" : "1px solid #e0e2e6",
-    borderRadius: "8px",
-    cursor: "pointer",
-    backgroundColor: selected ? "rgba(41, 141, 255, 0.05)" : "#ffffff",
-    transition: "all 0.2s",
-  });
+  // Radio group component
+  const RadioGroup = ({
+    name,
+    options,
+    value,
+    onChange
+  }: {
+    name: string;
+    options: { value: string; label: string }[];
+    value: string;
+    onChange: (value: string) => void;
+  }) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+      {options.map((option) => {
+        const selected = value === option.value;
+        return (
+          <label
+            key={option.value}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              padding: "14px 16px",
+              border: selected ? "2px solid #298dff" : "1px solid #e0e2e6",
+              borderRadius: "8px",
+              cursor: "pointer",
+              backgroundColor: selected ? "rgba(41, 141, 255, 0.05)" : "#ffffff",
+              transition: "all 0.2s",
+            }}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={option.value}
+              checked={selected}
+              onChange={(e) => onChange(e.target.value)}
+              style={{ display: "none" }}
+            />
+            <span
+              style={{
+                width: "20px",
+                height: "20px",
+                borderRadius: "50%",
+                border: selected ? "6px solid #298dff" : "2px solid #e0e2e6",
+                transition: "all 0.2s",
+              }}
+            />
+            <span style={{ color: "#131518", fontSize: "15px" }}>{option.label}</span>
+          </label>
+        );
+      })}
+    </div>
+  );
 
   const slideVariants = {
     enter: (direction: number) => ({
@@ -330,14 +376,8 @@ export default function ApplyPage() {
                             onChange={(e) => updateField("name", e.target.value)}
                             placeholder="John Smith"
                             style={inputStyle}
-                            onFocus={(e) => {
-                              e.target.style.borderColor = "#298dff";
-                              e.target.style.boxShadow = "0 0 0 3px rgba(41, 141, 255, 0.1)";
-                            }}
-                            onBlur={(e) => {
-                              e.target.style.borderColor = "#e0e2e6";
-                              e.target.style.boxShadow = "none";
-                            }}
+                            onFocus={handleInputFocus}
+                            onBlur={handleInputBlur}
                           />
                         </div>
                         <div>
@@ -348,14 +388,8 @@ export default function ApplyPage() {
                             onChange={(e) => updateField("email", e.target.value)}
                             placeholder="john@example.com"
                             style={inputStyle}
-                            onFocus={(e) => {
-                              e.target.style.borderColor = "#298dff";
-                              e.target.style.boxShadow = "0 0 0 3px rgba(41, 141, 255, 0.1)";
-                            }}
-                            onBlur={(e) => {
-                              e.target.style.borderColor = "#e0e2e6";
-                              e.target.style.boxShadow = "none";
-                            }}
+                            onFocus={handleInputFocus}
+                            onBlur={handleInputBlur}
                           />
                         </div>
                         <div>
@@ -366,14 +400,8 @@ export default function ApplyPage() {
                             onChange={(e) => updateField("mobile", e.target.value)}
                             placeholder="0412 345 678"
                             style={inputStyle}
-                            onFocus={(e) => {
-                              e.target.style.borderColor = "#298dff";
-                              e.target.style.boxShadow = "0 0 0 3px rgba(41, 141, 255, 0.1)";
-                            }}
-                            onBlur={(e) => {
-                              e.target.style.borderColor = "#e0e2e6";
-                              e.target.style.boxShadow = "none";
-                            }}
+                            onFocus={handleInputFocus}
+                            onBlur={handleInputBlur}
                           />
                         </div>
                       </div>
@@ -402,14 +430,8 @@ export default function ApplyPage() {
                             onChange={(e) => updateField("businessName", e.target.value)}
                             placeholder="Acme Pty Ltd"
                             style={inputStyle}
-                            onFocus={(e) => {
-                              e.target.style.borderColor = "#298dff";
-                              e.target.style.boxShadow = "0 0 0 3px rgba(41, 141, 255, 0.1)";
-                            }}
-                            onBlur={(e) => {
-                              e.target.style.borderColor = "#e0e2e6";
-                              e.target.style.boxShadow = "none";
-                            }}
+                            onFocus={handleInputFocus}
+                            onBlur={handleInputBlur}
                           />
                         </div>
                         <div>
@@ -420,14 +442,8 @@ export default function ApplyPage() {
                             onChange={(e) => updateField("websiteUrl", e.target.value)}
                             placeholder="https://example.com"
                             style={inputStyle}
-                            onFocus={(e) => {
-                              e.target.style.borderColor = "#298dff";
-                              e.target.style.boxShadow = "0 0 0 3px rgba(41, 141, 255, 0.1)";
-                            }}
-                            onBlur={(e) => {
-                              e.target.style.borderColor = "#e0e2e6";
-                              e.target.style.boxShadow = "none";
-                            }}
+                            onFocus={handleInputFocus}
+                            onBlur={handleInputBlur}
                           />
                         </div>
                         <div>
@@ -436,14 +452,8 @@ export default function ApplyPage() {
                             value={formData.industry}
                             onChange={(e) => updateField("industry", e.target.value)}
                             style={selectStyle}
-                            onFocus={(e) => {
-                              e.target.style.borderColor = "#298dff";
-                              e.target.style.boxShadow = "0 0 0 3px rgba(41, 141, 255, 0.1)";
-                            }}
-                            onBlur={(e) => {
-                              e.target.style.borderColor = "#e0e2e6";
-                              e.target.style.boxShadow = "none";
-                            }}
+                            onFocus={handleInputFocus}
+                            onBlur={handleInputBlur}
                           >
                             <option value="">Select your industry</option>
                             {industries.map((ind) => (
@@ -453,33 +463,12 @@ export default function ApplyPage() {
                         </div>
                         <div>
                           <label style={labelStyle}>Do you currently have a website? *</label>
-                          <div style={radioGroupStyle}>
-                            {websiteStatuses.map((status) => (
-                              <label
-                                key={status.value}
-                                style={radioLabelStyle(formData.hasWebsite === status.value)}
-                              >
-                                <input
-                                  type="radio"
-                                  name="hasWebsite"
-                                  value={status.value}
-                                  checked={formData.hasWebsite === status.value}
-                                  onChange={(e) => updateField("hasWebsite", e.target.value)}
-                                  style={{ display: "none" }}
-                                />
-                                <span
-                                  style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    borderRadius: "50%",
-                                    border: formData.hasWebsite === status.value ? "6px solid #298dff" : "2px solid #e0e2e6",
-                                    transition: "all 0.2s",
-                                  }}
-                                />
-                                <span style={{ color: "#131518", fontSize: "15px" }}>{status.label}</span>
-                              </label>
-                            ))}
-                          </div>
+                          <RadioGroup
+                            name="hasWebsite"
+                            options={websiteStatuses}
+                            value={formData.hasWebsite}
+                            onChange={(v) => updateField("hasWebsite", v)}
+                          />
                         </div>
                       </div>
                     </motion.div>
@@ -501,33 +490,12 @@ export default function ApplyPage() {
                       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                         <div>
                           <label style={labelStyle}>What do you need? *</label>
-                          <div style={radioGroupStyle}>
-                            {lookingForOptions.map((option) => (
-                              <label
-                                key={option.value}
-                                style={radioLabelStyle(formData.lookingFor === option.value)}
-                              >
-                                <input
-                                  type="radio"
-                                  name="lookingFor"
-                                  value={option.value}
-                                  checked={formData.lookingFor === option.value}
-                                  onChange={(e) => updateField("lookingFor", e.target.value)}
-                                  style={{ display: "none" }}
-                                />
-                                <span
-                                  style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    borderRadius: "50%",
-                                    border: formData.lookingFor === option.value ? "6px solid #298dff" : "2px solid #e0e2e6",
-                                    transition: "all 0.2s",
-                                  }}
-                                />
-                                <span style={{ color: "#131518", fontSize: "15px" }}>{option.label}</span>
-                              </label>
-                            ))}
-                          </div>
+                          <RadioGroup
+                            name="lookingFor"
+                            options={lookingForOptions}
+                            value={formData.lookingFor}
+                            onChange={(v) => updateField("lookingFor", v)}
+                          />
                         </div>
                         <div>
                           <label style={labelStyle}>What&apos;s your biggest frustration right now? *</label>
@@ -541,14 +509,8 @@ export default function ApplyPage() {
                               resize: "vertical",
                               minHeight: "100px",
                             }}
-                            onFocus={(e) => {
-                              e.target.style.borderColor = "#298dff";
-                              e.target.style.boxShadow = "0 0 0 3px rgba(41, 141, 255, 0.1)";
-                            }}
-                            onBlur={(e) => {
-                              e.target.style.borderColor = "#e0e2e6";
-                              e.target.style.boxShadow = "none";
-                            }}
+                            onFocus={handleInputFocus}
+                            onBlur={handleInputBlur}
                           />
                         </div>
                         <div>
@@ -557,14 +519,8 @@ export default function ApplyPage() {
                             value={formData.heardFrom}
                             onChange={(e) => updateField("heardFrom", e.target.value)}
                             style={selectStyle}
-                            onFocus={(e) => {
-                              e.target.style.borderColor = "#298dff";
-                              e.target.style.boxShadow = "0 0 0 3px rgba(41, 141, 255, 0.1)";
-                            }}
-                            onBlur={(e) => {
-                              e.target.style.borderColor = "#e0e2e6";
-                              e.target.style.boxShadow = "none";
-                            }}
+                            onFocus={handleInputFocus}
+                            onBlur={handleInputBlur}
                           >
                             <option value="">Select an option</option>
                             {heardFromOptions.map((opt) => (
