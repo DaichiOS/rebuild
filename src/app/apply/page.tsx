@@ -66,7 +66,32 @@ export default function ApplyPage() {
 
   const totalSteps = 3;
 
-  const [calendlyLoaded, setCalendlyLoaded] = useState(false);
+  useEffect(() => {
+    if (formComplete) {
+      // Load Calendly widget script
+      const script = document.createElement("script");
+      script.src = "https://assets.calendly.com/assets/external/widget.js";
+      script.async = true;
+      document.body.appendChild(script);
+
+      // Load Calendly CSS
+      const link = document.createElement("link");
+      link.href = "https://assets.calendly.com/assets/external/widget.css";
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
+
+      // Hide Calendly's default spinners
+      const style = document.createElement("style");
+      style.textContent = `.calendly-spinner { display: none !important; }`;
+      document.head.appendChild(style);
+
+      return () => {
+        if (document.body.contains(script)) document.body.removeChild(script);
+        if (document.head.contains(link)) document.head.removeChild(link);
+        if (document.head.contains(style)) document.head.removeChild(style);
+      };
+    }
+  }, [formComplete]);
 
   const openCalendly = () => {
     // @ts-expect-error Calendly is loaded from external script
@@ -75,27 +100,6 @@ export default function ApplyPage() {
       window.Calendly.initPopupWidget({
         url: `https://calendly.com/eddie-rebuild/30min?hide_gdpr_banner=1&name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}`,
       });
-      return;
-    }
-
-    // Load Calendly on first click
-    if (!calendlyLoaded) {
-      const script = document.createElement("script");
-      script.src = "https://assets.calendly.com/assets/external/widget.js";
-      script.async = true;
-      script.onload = () => {
-        setCalendlyLoaded(true);
-        // @ts-expect-error Calendly is loaded from external script
-        window.Calendly.initPopupWidget({
-          url: `https://calendly.com/eddie-rebuild/30min?hide_gdpr_banner=1&name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}`,
-        });
-      };
-      document.body.appendChild(script);
-
-      const link = document.createElement("link");
-      link.href = "https://assets.calendly.com/assets/external/widget.css";
-      link.rel = "stylesheet";
-      document.head.appendChild(link);
     }
   };
 
