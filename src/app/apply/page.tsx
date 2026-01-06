@@ -27,11 +27,11 @@ export default function ApplyPage() {
         style={{
           maxWidth: "900px",
           margin: "0 auto",
-          padding: "40px 24px",
+          padding: "24px 24px",
         }}
       >
         {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: "32px" }}>
+        <div style={{ textAlign: "center", marginBottom: "16px" }}>
           <h1
             style={{
               fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
