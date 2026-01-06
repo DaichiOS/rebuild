@@ -35,13 +35,22 @@ export default function FloatingNav() {
           }}
         >
           {/* Logo */}
-          <Link href="/" style={{ display: "flex", alignItems: "center" }}>
+          <Link
+            href="/"
+            onClick={(e) => {
+              if (window.location.pathname === "/") {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
+            style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+          >
             <Image
               src="/logos/icon.png"
               alt="re.build"
               width={32}
               height={32}
-              style={{ width: "32px", height: "32px" }}
+              style={{ width: "32px", height: "32px", cursor: "pointer" }}
             />
           </Link>
 
