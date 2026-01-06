@@ -597,6 +597,7 @@ export default function ApplyPage() {
                     variant="dark"
                     onClick={handleNext}
                     disabled={!canProceed}
+                    className="!mx-0"
                     style={{
                       opacity: canProceed ? 1 : 0.5,
                       pointerEvents: canProceed ? "auto" : "none",
