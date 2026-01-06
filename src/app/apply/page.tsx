@@ -68,29 +68,38 @@ export default function ApplyPage() {
 
   useEffect(() => {
     if (formComplete) {
-      // Load Calendly widget script
+      // Load Calendly widget script for popup
       const script = document.createElement("script");
       script.src = "https://assets.calendly.com/assets/external/widget.js";
       script.async = true;
-      script.onload = () => {
-        // @ts-expect-error Calendly is loaded from external script
-        if (window.Calendly) {
-          // @ts-expect-error Calendly is loaded from external script
-          window.Calendly.initInlineWidget({
-            url: `https://calendly.com/eddie-rebuild/30min?hide_gdpr_banner=1&name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}`,
-            parentElement: document.getElementById("calendly-embed"),
-          });
-        }
-      };
       document.body.appendChild(script);
+
+      // Load Calendly CSS
+      const link = document.createElement("link");
+      link.href = "https://assets.calendly.com/assets/external/widget.css";
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
 
       return () => {
         if (document.body.contains(script)) {
           document.body.removeChild(script);
         }
+        if (document.head.contains(link)) {
+          document.head.removeChild(link);
+        }
       };
     }
-  }, [formComplete, formData.name, formData.email]);
+  }, [formComplete]);
+
+  const openCalendly = () => {
+    // @ts-expect-error Calendly is loaded from external script
+    if (window.Calendly) {
+      // @ts-expect-error Calendly is loaded from external script
+      window.Calendly.initPopupWidget({
+        url: `https://calendly.com/eddie-rebuild/30min?hide_gdpr_banner=1&name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}`,
+      });
+    }
+  };
 
   const updateField = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -626,39 +635,47 @@ export default function ApplyPage() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: "60vh",
+              }}
             >
               {/* Success message */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                style={{ textAlign: "center", marginBottom: "24px" }}
+                style={{ textAlign: "center", marginBottom: "32px" }}
               >
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ duration: 0.4, delay: 0.3, type: "spring", stiffness: 200 }}
                   style={{
-                    width: "64px",
-                    height: "64px",
+                    width: "80px",
+                    height: "80px",
                     borderRadius: "50%",
                     backgroundColor: "#298dff",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    margin: "0 auto 16px",
+                    margin: "0 auto 24px",
+                    boxShadow: "0 8px 32px rgba(41, 141, 255, 0.3)",
                   }}
                 >
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 6L9 17l-5-5" />
                   </svg>
                 </motion.div>
                 <h1
                   style={{
-                    fontSize: "clamp(1.5rem, 4vw, 2rem)",
+                    fontSize: "clamp(2rem, 5vw, 2.5rem)",
                     fontWeight: 700,
                     color: "#131518",
-                    marginBottom: "8px",
+                    marginBottom: "12px",
                     letterSpacing: "-0.02em",
                   }}
                 >
@@ -666,7 +683,7 @@ export default function ApplyPage() {
                 </h1>
                 <p
                   style={{
-                    fontSize: "16px",
+                    fontSize: "18px",
                     color: "#4b515b",
                     lineHeight: 1.6,
                   }}
@@ -675,19 +692,46 @@ export default function ApplyPage() {
                 </p>
               </motion.div>
 
-              {/* Calendly Embed */}
+              {/* Pick a time button */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
               >
-                <div
-                  id="calendly-embed"
+                <button
+                  onClick={openCalendly}
                   style={{
-                    minWidth: "320px",
-                    height: "700px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    padding: "18px 32px",
+                    fontSize: "18px",
+                    fontWeight: 600,
+                    color: "#ffffff",
+                    backgroundColor: "#131518",
+                    border: "none",
+                    borderRadius: "12px",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
                   }}
-                />
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow = "0 8px 30px rgba(0, 0, 0, 0.2)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.15)";
+                  }}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                  Pick a time
+                </button>
               </motion.div>
 
               {/* Alternative */}
@@ -696,9 +740,7 @@ export default function ApplyPage() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.7 }}
                 style={{
-                  marginTop: "24px",
-                  paddingTop: "24px",
-                  borderTop: "1px solid rgba(0, 0, 0, 0.08)",
+                  marginTop: "32px",
                   textAlign: "center",
                 }}
               >
