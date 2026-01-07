@@ -469,4 +469,42 @@ html {
   animation: shine 1.5s ease-in-out infinite;
 }
 
+/* Story section base styles */
+.story-section {
+  position: relative;
+  z-index: 1;
+}
+
+/* Logo marquee animation - best practice approach */
+.marquee {
+  --gap: 2rem;
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: var(--gap);
+}
+
+.marquee__group {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  min-width: 100%;
+  gap: var(--gap);
+  animation: scroll 25s linear infinite;
+}
+
+.marquee:hover .marquee__group {
+  animation-play-state: paused;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
 
