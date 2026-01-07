@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Liquid, type Colors } from './liquid-button';
 
 // Blue theme colors matching the site's accent
@@ -28,6 +29,7 @@ type ShimmerButtonProps = {
   href: string;
   children: React.ReactNode;
   avatar?: string;
+  avatarImage?: string;
   colors?: Colors;
 };
 
@@ -35,6 +37,7 @@ export const ShimmerButton: React.FC<ShimmerButtonProps> = ({
   href,
   children,
   avatar,
+  avatarImage,
   colors = BLUE_COLORS,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -98,7 +101,21 @@ export const ShimmerButton: React.FC<ShimmerButtonProps> = ({
 
         {/* Button content */}
         <span className="absolute inset-0 flex items-center justify-center gap-3 px-4 rounded-full text-white text-base font-medium tracking-wide whitespace-nowrap">
-          {avatar && (
+          {avatarImage ? (
+            <span
+              className={`w-8 h-8 rounded-full overflow-hidden flex-shrink-0 transition-transform duration-300 ring-2 ring-white/80 ${
+                isHovered ? 'scale-110' : 'scale-100'
+              }`}
+            >
+              <Image
+                src={avatarImage}
+                alt="Avatar"
+                width={32}
+                height={32}
+                className="w-full h-full object-cover object-top"
+              />
+            </span>
+          ) : avatar ? (
             <span
               className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 transition-transform duration-300 ${
                 isHovered ? 'scale-110' : 'scale-100'
@@ -107,7 +124,7 @@ export const ShimmerButton: React.FC<ShimmerButtonProps> = ({
             >
               {avatar}
             </span>
-          )}
+          ) : null}
           <span>{children}</span>
         </span>
       </Link>

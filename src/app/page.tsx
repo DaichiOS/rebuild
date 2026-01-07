@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import ProcessFlow from "@/components/ProcessFlow";
 import LogoMarquee from "@/components/LogoMarquee";
 import ProjectShowcase from "@/components/ProjectShowcase";
+import AboutMe from "@/components/AboutMe";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
 
@@ -52,7 +53,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7, ease: "easeOut" }}
           >
-            <ShimmerButton href="/apply" avatar="E">
+            <ShimmerButton href="/apply" avatarImage="/me/eddie-bg.png">
               Book a call with Eddie
             </ShimmerButton>
             <Link href="#how-it-works">
@@ -69,6 +70,9 @@ export default function Home() {
 
       {/* Process Flow - GSAP Animated */}
       <ProcessFlow />
+
+      {/* About Me */}
+      <AboutMe />
 
       {/* Project Showcase */}
       <ProjectShowcase />

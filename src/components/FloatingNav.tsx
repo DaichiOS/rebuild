@@ -8,6 +8,7 @@ import { NeonButton } from "@/components/ui/neon-button";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
   { label: "How it works", href: "#how-it-works" },
   { label: "Book a call", href: "/apply" },
 ];
