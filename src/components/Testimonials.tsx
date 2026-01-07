@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Image from "next/image";
 
 const testimonials = [
@@ -11,20 +8,9 @@ const testimonials = [
     role: "CTO, index.fun",
     avatar: "/testimonials/jarryd.jpeg",
   },
-  // Add more testimonials here as you get them
 ];
 
 export default function Testimonials() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const goToPrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
-  };
-
   return (
     <section className="py-24 md:py-32 px-6 bg-[--color-off-white]">
       <div className="max-w-5xl mx-auto">
@@ -95,25 +81,6 @@ export default function Testimonials() {
           ))}
         </div>
 
-        {/* Navigation - only show if multiple testimonials */}
-        {testimonials.length > 2 && (
-          <div className="flex gap-2 mt-8">
-            <button
-              onClick={goToPrev}
-              className="w-12 h-12 rounded-full border border-[--color-light-gray] flex items-center justify-center hover:border-[--color-medium-gray] transition-colors"
-              aria-label="Previous testimonial"
-            >
-              <span>←</span>
-            </button>
-            <button
-              onClick={goToNext}
-              className="w-12 h-12 rounded-full border border-[--color-light-gray] flex items-center justify-center hover:border-[--color-medium-gray] transition-colors"
-              aria-label="Next testimonial"
-            >
-              <span>→</span>
-            </button>
-          </div>
-        )}
       </div>
     </section>
   );

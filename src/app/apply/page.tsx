@@ -51,6 +51,8 @@ const heardFromOptions = [
 export default function ApplyPage() {
   const [step, setStep] = useState(1);
   const [formComplete, setFormComplete] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -107,11 +109,41 @@ export default function ApplyPage() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const nextStep = () => {
+  const submitForm = async (): Promise<boolean> => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        setSubmitError(result.error || "Something went wrong. Please try again.");
+        return false;
+      }
+
+      return true;
+    } catch {
+      setSubmitError("Failed to submit. Please check your connection and try again.");
+      return false;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const nextStep = async () => {
     if (step < totalSteps) {
       setStep(step + 1);
     } else {
-      setFormComplete(true);
+      const success = await submitForm();
+      if (success) {
+        setFormComplete(true);
+      }
     }
   };
 
@@ -237,9 +269,9 @@ export default function ApplyPage() {
 
   const [direction, setDirection] = useState(0);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     setDirection(1);
-    nextStep();
+    await nextStep();
   };
 
   const handlePrev = () => {
@@ -533,13 +565,30 @@ export default function ApplyPage() {
                   )}
                 </AnimatePresence>
 
+                {/* Error message */}
+                {submitError && (
+                  <div
+                    style={{
+                      marginTop: "24px",
+                      padding: "12px 16px",
+                      backgroundColor: "rgba(220, 38, 38, 0.1)",
+                      border: "1px solid rgba(220, 38, 38, 0.2)",
+                      borderRadius: "8px",
+                      color: "#dc2626",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {submitError}
+                  </div>
+                )}
+
                 {/* Navigation buttons */}
                 <div
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    marginTop: "32px",
+                    marginTop: submitError ? "16px" : "32px",
                     paddingTop: "24px",
                     borderTop: "1px solid #e0e2e6",
                   }}
@@ -547,6 +596,7 @@ export default function ApplyPage() {
                   {step > 1 ? (
                     <button
                       onClick={handlePrev}
+                      disabled={isSubmitting}
                       style={{
                         padding: "12px 24px",
                         fontSize: "15px",
@@ -555,12 +605,15 @@ export default function ApplyPage() {
                         backgroundColor: "transparent",
                         border: "1px solid #e0e2e6",
                         borderRadius: "8px",
-                        cursor: "pointer",
+                        cursor: isSubmitting ? "not-allowed" : "pointer",
                         transition: "all 0.2s",
+                        opacity: isSubmitting ? 0.5 : 1,
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = "#131518";
-                        e.currentTarget.style.color = "#131518";
+                        if (!isSubmitting) {
+                          e.currentTarget.style.borderColor = "#131518";
+                          e.currentTarget.style.color = "#131518";
+                        }
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.borderColor = "#e0e2e6";
@@ -575,14 +628,14 @@ export default function ApplyPage() {
                   <NeonButton
                     variant="dark"
                     onClick={handleNext}
-                    disabled={!canProceed}
+                    disabled={!canProceed || isSubmitting}
                     className="!mx-0"
                     style={{
-                      opacity: canProceed ? 1 : 0.5,
-                      pointerEvents: canProceed ? "auto" : "none",
+                      opacity: canProceed && !isSubmitting ? 1 : 0.5,
+                      pointerEvents: canProceed && !isSubmitting ? "auto" : "none",
                     }}
                   >
-                    {step === totalSteps ? "Book my call" : "Continue"}
+                    {isSubmitting ? "Submitting..." : step === totalSteps ? "Book my call" : "Continue"}
                   </NeonButton>
                 </div>
               </motion.div>

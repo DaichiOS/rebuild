@@ -7,6 +7,8 @@ import LogoMarquee from "@/components/LogoMarquee";
 import ProjectShowcase from "@/components/ProjectShowcase";
 import AboutMe from "@/components/AboutMe";
 import Testimonials from "@/components/Testimonials";
+import Pricing from "@/components/Pricing";
+import FoundingSpots from "@/components/FoundingSpots";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
 
@@ -48,11 +50,22 @@ export default function Home() {
             </motion.span>
           </h1>
 
+          {/* Founding spots urgency */}
           <motion.div
-            className="flex flex-col items-center justify-center gap-5 mt-8"
+            className="flex justify-center mt-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.7, ease: "easeOut" }}
+            transition={{ duration: 0.5, delay: 0.65, ease: "easeOut" }}
+          >
+            <FoundingSpots />
+          </motion.div>
+
+          {/* CTAs */}
+          <motion.div
+            className="flex flex-col items-center justify-center gap-5 mt-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8, ease: "easeOut" }}
           >
             <ShimmerButton href="/apply" avatarImage="/me/eddie-bg.png">
               Book a call with Eddie
@@ -77,6 +90,9 @@ export default function Home() {
 
       {/* Testimonials */}
       <Testimonials />
+
+      {/* Pricing */}
+      <Pricing />
 
       {/* Project Showcase */}
       <ProjectShowcase />
