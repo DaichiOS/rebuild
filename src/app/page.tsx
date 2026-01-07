@@ -67,7 +67,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.8, ease: "easeOut" }}
           >
-            <ShimmerButton href="/apply" avatarImage="/me/eddie-bg.png">
+            <ShimmerButton href="/apply" avatarImage="/me/eddie-bg-1.png">
               Book a call with Eddie
             </ShimmerButton>
             <Link href="#how-it-works">
