@@ -1,5 +1,7 @@
 // Database types for Supabase tables
 
+export type LeadStatus = "pending" | "accepted" | "rejected";
+
 export type Lead = {
   id: string;
   name: string;
@@ -12,10 +14,12 @@ export type Lead = {
   looking_for: string;
   frustration: string;
   heard_from: string | null;
+  status: LeadStatus;
   created_at: string;
+  updated_at: string;
 };
 
-export type LeadInsert = Omit<Lead, "id" | "created_at">;
+export type LeadInsert = Omit<Lead, "id" | "created_at" | "updated_at" | "status">;
 
 export type FoundingSpots = {
   id: number;

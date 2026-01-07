@@ -100,7 +100,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
       heard_from: leadData.heardFrom || null,
     };
 
-    // Insert lead
+    // Insert lead (status defaults to 'pending' in database)
     const { data: newLead, error: insertError } = await supabase
       .from("leads")
       .insert(leadInsert)
@@ -114,11 +114,6 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
         { status: 500 }
       );
     }
-
-    // Decrement founding spots (fire and forget - don't block on this)
-    supabase.rpc("decrement_founding_spots").then(({ error }) => {
-      if (error) console.error("Failed to decrement founding spots:", error);
-    });
 
     return NextResponse.json({
       success: true,

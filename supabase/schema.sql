@@ -3,6 +3,13 @@
 -- Run this in Supabase SQL Editor
 -- =============================================
 
+-- Lead status enum type
+DO $$ BEGIN
+  CREATE TYPE lead_status AS ENUM ('pending', 'accepted', 'rejected');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
+
 -- Leads table: stores form submissions
 CREATE TABLE IF NOT EXISTS leads (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -16,7 +23,9 @@ CREATE TABLE IF NOT EXISTS leads (
   looking_for TEXT NOT NULL,
   frustration TEXT NOT NULL,
   heard_from TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  status lead_status DEFAULT 'pending',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Founding spots table: tracks limited availability
@@ -70,3 +79,6 @@ CREATE POLICY "Service role update founding spots" ON founding_spots
 
 -- Index for email lookups (duplicate checking)
 CREATE INDEX IF NOT EXISTS idx_leads_email ON leads(email);
+
+-- Index for status filtering
+CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);

@@ -110,9 +110,9 @@ export const ShimmerButton: React.FC<ShimmerButtonProps> = ({
               <Image
                 src={avatarImage}
                 alt="Avatar"
-                width={64}
-                height={64}
-                className="w-[150%] h-[150%] object-cover object-center -ml-[25%] -mt-[10%]"
+                width={32}
+                height={32}
+                className="w-full h-full object-cover object-top"
               />
             </span>
           ) : avatar ? (
