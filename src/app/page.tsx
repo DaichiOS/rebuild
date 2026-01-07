@@ -6,6 +6,7 @@ import ProcessFlow from "@/components/ProcessFlow";
 import LogoMarquee from "@/components/LogoMarquee";
 import ProjectShowcase from "@/components/ProjectShowcase";
 import AboutMe from "@/components/AboutMe";
+import Testimonials from "@/components/Testimonials";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
 
@@ -73,6 +74,9 @@ export default function Home() {
 
       {/* About Me */}
       <AboutMe />
+
+      {/* Testimonials */}
+      <Testimonials />
 
       {/* Project Showcase */}
       <ProjectShowcase />
