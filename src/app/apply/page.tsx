@@ -15,6 +15,7 @@ type FormData = {
   lookingFor: string;
   frustration: string;
   heardFrom: string;
+  heardFromOther: string;
 };
 
 const industries = [
@@ -64,6 +65,7 @@ export default function ApplyPage() {
     lookingFor: "",
     frustration: "",
     heardFrom: "",
+    heardFromOther: "",
   });
 
   const totalSteps = 3;
@@ -114,10 +116,15 @@ export default function ApplyPage() {
     setSubmitError(null);
 
     try {
+      // Combine heardFrom with heardFromOther if "Other" was selected
+      const heardFromValue = formData.heardFrom === "Other" && formData.heardFromOther
+        ? `Other: ${formData.heardFromOther}`
+        : formData.heardFrom;
+
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, heardFrom: heardFromValue }),
       });
 
       const result = await response.json();
@@ -549,7 +556,12 @@ export default function ApplyPage() {
                           <label style={labelStyle}>How did you hear about re.build?</label>
                           <select
                             value={formData.heardFrom}
-                            onChange={(e) => updateField("heardFrom", e.target.value)}
+                            onChange={(e) => {
+                              updateField("heardFrom", e.target.value);
+                              if (e.target.value !== "Other") {
+                                updateField("heardFromOther", "");
+                              }
+                            }}
                             style={selectStyle}
                             onFocus={handleInputFocus}
                             onBlur={handleInputBlur}
@@ -559,6 +571,17 @@ export default function ApplyPage() {
                               <option key={opt} value={opt}>{opt}</option>
                             ))}
                           </select>
+                          {formData.heardFrom === "Other" && (
+                            <input
+                              type="text"
+                              value={formData.heardFromOther}
+                              onChange={(e) => updateField("heardFromOther", e.target.value)}
+                              placeholder="Please specify..."
+                              style={{ ...inputStyle, marginTop: "12px" }}
+                              onFocus={handleInputFocus}
+                              onBlur={handleInputBlur}
+                            />
+                          )}
                         </div>
                       </div>
                     </motion.div>
